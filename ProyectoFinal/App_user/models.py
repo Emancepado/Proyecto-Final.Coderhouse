@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 
@@ -9,3 +10,12 @@ class usuario(models.Model):
     email = models.EmailField()
 
 
+class producto(models.Model):
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    nombre_producto = models.CharField(max_length=40)
+    descripcion_producto = models.CharField(max_length=200)
+    stock_producto = models.IntegerField()
+    precio_producto = models.FloatField()
+    imagen_producto = models.ImageField(upload_to='productos/', blank=True, null=True)
+
+    

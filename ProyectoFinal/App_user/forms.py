@@ -1,7 +1,12 @@
+from typing import Any, Dict
 from django import forms
+from django.contrib.auth.forms import UserCreationForm
 
-class form_usuario(forms.Form):
-    nombre = forms.CharField(max_length=40)
-    apellido = forms.CharField(max_length=40)
-    nombreEmpresa = forms.CharField(max_length=40)
-    email = forms.EmailField()
+
+class RegistroForm(UserCreationForm):
+    class Meta(UserCreationForm.Meta):
+        fields = ['username', 'first_name','last_name','email']
+
+
+
+        

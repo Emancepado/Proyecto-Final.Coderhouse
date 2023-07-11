@@ -10,11 +10,11 @@
 
 .formLogin{
     font-weight: bold;
-    background: linear-gradient(45deg, rgb(4, 5, 31) 0%, rgb(194, 33, 181) 100%);
+    background: linear-gradient(45deg, rgb(4, 5, 31) 0%, rgb(64, 31, 184) 100%);
     padding: 40px 20px 20px 20px;
     border-radius: 5px;
-    width: 350px;
-    height: 400px;
+    width: auto;
+    height: auto;
 
 }
 .formLogin div{

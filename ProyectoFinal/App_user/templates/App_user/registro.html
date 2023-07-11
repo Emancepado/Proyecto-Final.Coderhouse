@@ -11,22 +11,15 @@
 </head>
 <body>
     <div class="containerForm"> 
-        <form action="" method="POST" class="formLogin"> {% csrf_token %}
-            <h3 style="color: white; font-weight:bold; margin-bottom: 30px; display: flex; justify-content: center; align-items: center;">Registro Facturance</h3>
-            <div>
-                <input name="username" type="text" placeholder="User" class="inputLogin">
-            </div>
-            <div>
-                <input name="password1" type="password" placeholder="Password" class="inputLogin">
-            </div>
-            <div>
-                <input name="password2" type="password" placeholder="Password Confirmation" class="inputLogin">
-            </div>
-            <div>
-                <button class="btn btn-primary" type="submit">Registrar</button>
-            </div>
-            <p style="color: white;">Ya tienes una cuenta? <a href="../">Iniciar sesion</a></p>
+        <form action="{% url 'registro' %}" method="POST" class="formLogin">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div>
+            <button class="btn btn-primary" type="submit">Registrar</button>
+        </div>
+        <p style="color: white;">¿Ya tienes una cuenta? <a href="../">Iniciar sesión</a></p>
         </form>
+
     </div>
 </body>
 </html>
