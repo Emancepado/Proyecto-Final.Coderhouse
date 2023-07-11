@@ -13,6 +13,7 @@ class usuario(models.Model):
 class producto(models.Model):
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
     nombre_producto = models.CharField(max_length=40)
+    bars_code = models.IntegerField(null=True, blank=True)
     descripcion_producto = models.CharField(max_length=200)
     stock_producto = models.IntegerField()
     precio_producto = models.FloatField()
