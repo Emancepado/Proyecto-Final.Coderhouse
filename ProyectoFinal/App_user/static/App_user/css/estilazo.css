@@ -1,0 +1,31 @@
+.containerForm{
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    position: absolute !important;
+    height: 100% !important;
+    width: 100% !important;
+    background-image: url("../assets/img/FondoLogin.jpg");
+}
+
+.formLogin{
+    font-weight: bold;
+    background: linear-gradient(45deg, rgb(4, 5, 31) 0%, rgb(194, 33, 181) 100%);
+    padding: 40px 20px 20px 20px;
+    border-radius: 5px;
+    width: 350px;
+    height: 400px;
+
+}
+.formLogin div{
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.inputLogin{
+    border-radius: 5px;
+    border: 1px solid rebeccapurple;
+    width: 90%;
+}
