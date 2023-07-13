@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from .forms import RegistroForm, UserEditForm, UserChangePassword
+from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout, update_session_auth_hash
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm
@@ -15,7 +16,12 @@ def registration(request):
                 form.add_error('email', 'El email ya está registrado.')
             else:
                 form.save()
+                messages.success(request, '¡Registro exitoso! Ahora puedes iniciar sesión.')
                 return redirect('../')
+        else:
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f'Error en el campo "{field}": {error}')
     
     else: 
         form = RegistroForm()
@@ -51,19 +57,22 @@ def logout_view(request):
 @login_required
 def editarPerfil(request):
     usuario = request.user
-    user_basic_info = User.objects.get(id = usuario.id)
+    user_basic_info = User.objects.get(id=usuario.id)
     if request.method == "POST":
-        form = UserEditForm(request.POST, instance = usuario)
+        form = UserEditForm(request.POST, instance=usuario)
         if form.is_valid():
             user_basic_info.username = form.cleaned_data.get('username')
             user_basic_info.email = form.cleaned_data.get('email')
             user_basic_info.first_name = form.cleaned_data.get('first_name')
             user_basic_info.last_name = form.cleaned_data.get('last_name')
             user_basic_info.save()
+            messages.success(request, '¡Perfil actualizado exitosamente!')
             return redirect('../home')
-        
         else:
-            form = UserEditForm(initial = {'username': usuario.username, 'email': usuario.email, 'first_name': usuario.first_name, 'last_name': usuario.last_name} )
+            form = UserEditForm(initial={'username': usuario.username, 'email': usuario.email, 'first_name': usuario.first_name, 'last_name': usuario.last_name})
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f'Error en el campo "{field}": {error}')
             return render(request, 'App_user/editarPerfil.html', {"form": form })
     else:
         form = UserEditForm(initial={'username': usuario.username, 'email': usuario.email, 'first_name': usuario.first_name, 'last_name': usuario.last_name})
@@ -75,13 +84,18 @@ def editarPerfil(request):
 def editarContraseña(request):
     usuario = request.user 
     if request.method == 'POST':
-        form = UserChangePassword(data = request.POST , user = usuario)
+        form = UserChangePassword(data=request.POST, user=usuario)
         if form.is_valid():
             user = form.save()
             update_session_auth_hash(request, user)
-            return render(request, "App_user/editarPerfil.html")
+            messages.success(request, 'Contraseña actualizada exitosamente.')
+            return redirect('../editarPerfil')
+        else:
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f'Error en el campo "{field}": {error}')
+            return redirect('../editarContraseña')
     else: 
-        form = UserChangePassword(user = usuario)
-        return render(request, 'App_user/editarPerfil.html', {"form": form})
-
+        form = UserChangePassword(user=usuario)
+        return render(request, 'App_user/editarContraseña.html', {"form": form})
 

@@ -2,14 +2,26 @@
 {% load static %}
 
 {% block metamorphosis %}
-    <h6>Username: {{user.username}}</h6>
+    <div class="container">
+        <h6>Username: {{ user.username }}</h6>
 
-    <form method="POST"> {% csrf_token %}
-        <table>
-            {{ form.as_table }}
-        </table>
-        
-        <input type="submit" value="Confirmar cambio de contraseña" class="btn btn-success">
+        {% if messages %}
+            <div class="container mt-4">
+                {% for message in messages %}
+                    <div class="alert alert-danger" role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
 
-    </form>
+        <form method="POST">
+            {% csrf_token %}
+            <table>
+                {{ form.as_table }}
+            </table>
+
+            <input type="submit" value="Confirmar cambio de contraseña" class="btn btn-success">
+        </form>
+    </div>
 {% endblock %}
