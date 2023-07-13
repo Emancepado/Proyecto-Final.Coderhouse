@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from .forms import RegistroForm, UserEditForm
-from django.contrib.auth import login, authenticate, logout
+from .forms import RegistroForm, UserEditForm, UserChangePassword
+from django.contrib.auth import login, authenticate, logout, update_session_auth_hash
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
@@ -68,4 +68,20 @@ def editarPerfil(request):
     else:
         form = UserEditForm(initial={'username': usuario.username, 'email': usuario.email, 'first_name': usuario.first_name, 'last_name': usuario.last_name})
         return render(request, 'App_user/editarPerfil.html', {"form": form})
+    
+
+
+@login_required
+def editarContraseña(request):
+    usuario = request.user 
+    if request.method == 'POST':
+        form = UserChangePassword(data = request.POST , user = usuario)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)
+            return render(request, "App_user/editarPerfil.html")
+    else: 
+        form = UserChangePassword(user = usuario)
+        return render(request, 'App_user/editarPerfil.html', {"form": form})
+
 

@@ -1,6 +1,6 @@
 from typing import Any, Dict
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordChangeForm
 from django.contrib.auth.models import User
 
 
@@ -30,4 +30,16 @@ class UserEditForm(UserChangeForm):
     class Meta:
         model = User
         fields = ['username','email','first_name','last_name']
+        help_text = {k:"" for k in fields}
+
+
+class UserChangePassword(PasswordChangeForm):
+    old_password = forms.CharField(label= "Contraseña vieja", widget= forms.PasswordInput(attrs={"placeholder": "Contraseña vieja"}))
+    new_password1 = forms.CharField(label= "Contraseña nueva", widget= forms.PasswordInput(attrs={"placeholder": "Contraseña nueva"}))
+    new_password2 = forms.CharField(label= "Contraseña nueva", widget= forms.PasswordInput(attrs={"placeholder": "Confirmar contraseña nueva"}))
+    
+    
+    class Meta:
+        model = User
+        fields = ['old_password','new_password1','new_password2']
         help_text = {k:"" for k in fields}
