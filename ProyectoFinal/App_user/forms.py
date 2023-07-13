@@ -23,9 +23,10 @@ class RegistroForm(UserCreationForm):
 
 class UserEditForm(UserChangeForm):
     username = forms.CharField(widget= forms.TextInput(attrs={"placeholder": "Username"}))
-    email = forms.CharField(widget= forms.TextInput(attrs={"placeholder": "Email"}))
+    email = forms.EmailField(widget= forms.TextInput(attrs={"placeholder": "Email"}))
     first_name = forms.CharField(widget= forms.TextInput(attrs={"placeholder": "Primer nombre"}), label= "Nombre completo")
     last_name = forms.CharField(widget= forms.TextInput(attrs={"placeholder": "Nombre del negocio"}), label="Nombre del negocio")
+    password = None
     
     class Meta:
         model = User
@@ -43,3 +44,8 @@ class UserChangePassword(PasswordChangeForm):
         model = User
         fields = ['old_password','new_password1','new_password2']
         help_text = {k:"" for k in fields}
+
+
+class AvatarForm(forms.Form):
+    avatar = forms.ImageField()
+    description = forms.CharField(widget= forms.Textarea(attrs={"placeholder": "Descripcion del negocio con vista al publico"}), label= "Descripcion del negocio con vista al publico")
