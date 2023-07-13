@@ -10,6 +10,11 @@ class usuario(models.Model):
     email = models.EmailField()
 
 
+class Avatar(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='avatares', null=True, blank=True)
+    description = models.TextField(max_length=500, null=True, blank=True)
+
 class producto(models.Model):
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
     nombre_producto = models.CharField(max_length=40)
@@ -18,5 +23,7 @@ class producto(models.Model):
     stock_producto = models.IntegerField()
     precio_producto = models.FloatField()
     imagen_producto = models.ImageField(upload_to='productos/', blank=True, null=True)
+
+
 
     

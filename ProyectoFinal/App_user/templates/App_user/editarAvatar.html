@@ -2,13 +2,12 @@
 {% load static %}
 
 {% block metamorphosis %}
-    <h3>Editar Perfil</h3>
-    <h6>{{user.username}}</h6>
+    <h3>Editar Perfil del negocio</h3>
+    <h4>{{user.last_name}}</h4>
 
-    <form method="POST"> {% csrf_token %}
+    <form method="POST" enctype="multipart/form-data"> {% csrf_token %}
         <table>
             {{ form.as_table }}
-
         </table>
         
         <input type="submit" value="Confirmar edición" class="btn btn-success">

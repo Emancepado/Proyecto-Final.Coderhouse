@@ -5,7 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="{% static 'App_user/css/bootstrap.min.css'%}" rel="stylesheet"/>
+    <link href="{% static 'App_user/css/estilazo.css'%}" rel="stylesheet"/>
     <script src="{% static 'App_user/js/bootstrap.min.js'%}"> </script>
+
     <title>Inicio|App_user</title>
 </head>
 <body>
@@ -18,7 +20,7 @@
             <div class="collapse navbar-collapse" id="navbarColor01">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" href="/home">Mi Perfil
+                        <a class="nav-link active" href="/home">Mi Perfil {{avatar}}
                             <span class="visually-hidden">(current)</span>
                         </a>
                     </li>

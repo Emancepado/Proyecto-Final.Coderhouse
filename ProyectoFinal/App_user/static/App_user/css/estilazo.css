@@ -29,3 +29,7 @@
     border: 1px solid rebeccapurple;
     width: 90%;
 }
+
+.alert-error{
+    background-color: #e74c3c !important; 
+}

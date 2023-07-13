@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect
-from .forms import RegistroForm, UserEditForm, UserChangePassword
+from .forms import RegistroForm, UserEditForm, UserChangePassword, AvatarForm
+from .models import Avatar
+from django.shortcuts import get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout, update_session_auth_hash
 from django.contrib.auth.models import User
@@ -47,7 +49,8 @@ def loginWeb(request):
 
 @login_required    
 def home(request):
-    return render(request, "App_user/home.html")
+    avatar = getAvatar(request)
+    return render(request, "App_user/home.html",{"avatar": avatar})
 
 @login_required
 def logout_view(request):
@@ -98,4 +101,38 @@ def editarContraseña(request):
     else: 
         form = UserChangePassword(user=usuario)
         return render(request, 'App_user/editarContraseña.html', {"form": form})
+    
+
+
+@login_required
+def editarAvatar(request):
+    if request.method == 'POST':
+        form = AvatarForm(request.POST, request.FILES)
+        if form.is_valid():
+            user = User.objects.get(username = request.user)
+            avatar = Avatar.objects.get(user = user, image = form.cleaned_data['avatar'], id = request.user.id )
+            avatar.save()
+            avatar = Avatar.objects.filter(user = request.user.id)
+            try:
+                avatar = avatar[0].image.url
+            except:
+                avatar = None
+            return render(request, "App_user/editarPerfil.html", {'avatar': avatar})
+    
+    else:
+        try:
+            avatar = Avatar.objects.filter(user = request.user.id)
+            form = AvatarForm()
+        except:
+            form = AvatarForm()
+    return render(request, 'App_user/editarAvatar.html', {'form': form})
+
+
+def getAvatar(request):
+    avatar = Avatar.objects.filter(user = request.user.id)
+    try:
+        avatar[0].image.url
+    except:
+        avatar = None
+    return avatar
 

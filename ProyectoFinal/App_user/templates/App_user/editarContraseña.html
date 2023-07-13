@@ -2,18 +2,9 @@
 {% load static %}
 
 {% block metamorphosis %}
+
     <div class="container">
         <h6>Username: {{ user.username }}</h6>
-
-        {% if messages %}
-            <div class="container mt-4">
-                {% for message in messages %}
-                    <div class="alert alert-danger" role="alert">
-                        {{ message }}
-                    </div>
-                {% endfor %}
-            </div>
-        {% endif %}
 
         <form method="POST">
             {% csrf_token %}
