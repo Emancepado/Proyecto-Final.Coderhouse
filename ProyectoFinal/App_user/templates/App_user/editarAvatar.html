@@ -5,12 +5,17 @@
     <h3>Editar Perfil del negocio</h3>
     <h4>{{user.last_name}}</h4>
 
-    <form method="POST" enctype="multipart/form-data"> {% csrf_token %}
-        <table>
-            {{ form.as_table }}
-        </table>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.avatar.label_tag }}
+        {{ form.avatar }}
+        <br>
+        <br>
+        <br>
+        {{ form.description.label_tag }}
+        {{ form.description }}
+        <br><br>
         
         <input type="submit" value="Confirmar edición" class="btn btn-success">
-
     </form>
 {% endblock %}

@@ -106,33 +106,26 @@ def editarContraseña(request):
 
 @login_required
 def editarAvatar(request):
+    avatar = getAvatar(request)
+    if avatar is None:
+        avatar = Avatar(user=request.user)
+    
     if request.method == 'POST':
         form = AvatarForm(request.POST, request.FILES)
         if form.is_valid():
-            user = User.objects.get(username = request.user)
-            avatar = Avatar.objects.get(user = user, image = form.cleaned_data['avatar'], id = request.user.id )
+            avatar.image = form.cleaned_data['avatar']
+            avatar.description = form.cleaned_data['description']
             avatar.save()
-            avatar = Avatar.objects.filter(user = request.user.id)
-            try:
-                avatar = avatar[0].image.url
-            except:
-                avatar = None
-            return render(request, "App_user/editarPerfil.html", {'avatar': avatar})
+            messages.success(request, '¡Avatar actualizado exitosamente!')
+            return redirect('../editarPerfil')
     
     else:
-        try:
-            avatar = Avatar.objects.filter(user = request.user.id)
-            form = AvatarForm()
-        except:
-            form = AvatarForm()
-    return render(request, 'App_user/editarAvatar.html', {'form': form})
+        form = AvatarForm(initial={'avatar': avatar.image if avatar else None, 'description': avatar.description if avatar else None})
+    
+    return render(request, 'App_user/editarAvatar.html', {'form': form, 'avatar': avatar})
+
 
 
 def getAvatar(request):
-    avatar = Avatar.objects.filter(user = request.user.id)
-    try:
-        avatar[0].image.url
-    except:
-        avatar = None
+    avatar = Avatar.objects.filter(user=request.user).first()
     return avatar
-
