@@ -11,7 +11,8 @@ urlpatterns = [
     path('editarAvatar/', views.editarAvatar, name='editarAvatar'),
     path('productos/', views.crearProducto, name='productos'),
     path('productos/borrar/<int:producto_id>/', views.borrarProducto, name='borrarProducto'),
-    path('productos/editar/<int:producto_id>/', views.editarProducto, name='editarProducto')
+    path('productos/editar/<int:producto_id>/', views.editarProducto, name='editarProducto'),
+    path('ventas/', views.ventas, name='ventas'),
 
     
 

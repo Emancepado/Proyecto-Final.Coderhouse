@@ -1,11 +1,12 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import RegistroForm, UserEditForm, UserChangePassword, AvatarForm, productoForm, AvatarDescriptionForm
+from .forms import RegistroForm, UserEditForm, UserChangePassword, AvatarForm, productoForm, AvatarDescriptionForm, VentaForm, VentaFormSet, formset_factory
 from .models import Avatar, producto as Productos 
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout, update_session_auth_hash
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
+from django.forms.formsets import BaseFormSet
 # Create your views here.
 
 def registration(request):
@@ -111,6 +112,9 @@ def editarAvatar(request):
         form = AvatarForm(request.POST, request.FILES)
         form2 = AvatarDescriptionForm(request.POST)
         if form.is_valid() and form2.is_valid():
+            avatar_anterior = Avatar.objects.filter(user=request.user)
+            if (len(avatar_anterior) > 0):
+                avatar_anterior.delete()
             usuario = User.objects.get(username=request.user)
             avatar = Avatar(user=usuario, image=form.cleaned_data['avatar'], description=form2.cleaned_data['description'])
             avatar.save()
@@ -141,7 +145,7 @@ def getAvatar(request):
 def crearProducto(request):
     avatar = getAvatar(request)
     if request.method == 'POST':
-        miFormulario = productoForm(request.POST)
+        miFormulario = productoForm(request.POST, request.FILES)
         if miFormulario.is_valid():
             print(request.POST)
             miFormulario.save()
@@ -182,3 +186,27 @@ def editarProducto(request, producto_id):
 
     return render(request, 'App_user/editarProducto.html', {'form': form, 'avatar': avatar})
 
+@login_required
+def ventas(request):
+    ProductoFormSet = formset_factory(VentaForm, extra=1)
+
+    if request.method == 'POST':
+        formset = ProductoFormSet(request.POST)
+        if formset.is_valid():
+            for form in formset:
+                producto_id = form.cleaned_data['producto']
+                cantidad = form.cleaned_data['cantidad']
+
+                producto = Productos.objects.get(id=producto_id)
+                if cantidad <= producto.stock:
+                    producto.stock -= cantidad
+                    producto.save()
+                    mensaje = 'Venta realizada con éxito.'
+                else:
+                    mensaje = 'No hay suficiente stock disponible para realizar la venta.'
+            
+            return render(request, 'App_user/ventas.html', {'formset': formset, 'mensaje': mensaje})
+    else:
+        formset = ProductoFormSet()
+
+    return render(request, 'App_user/ventas.html', {'formset': formset})

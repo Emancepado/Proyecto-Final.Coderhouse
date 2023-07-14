@@ -3,6 +3,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordChangeForm
 from django.contrib.auth.models import User
 from .models import producto
+from django.forms import formset_factory
 
 
 class RegistroForm(UserCreationForm):
@@ -65,3 +66,11 @@ class productoForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['imagen_producto'].required = False
+
+
+
+class VentaForm(forms.Form):
+    producto = forms.ModelChoiceField(queryset=producto.objects.all(), label='Producto')
+    cantidad = forms.IntegerField(label='Cantidad')
+
+VentaFormSet = formset_factory(VentaForm, extra=1)
