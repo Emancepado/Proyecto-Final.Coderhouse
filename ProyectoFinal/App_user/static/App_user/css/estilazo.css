@@ -33,3 +33,32 @@
 .alert-error{
     background-color: #e74c3c !important; 
 }
+
+.btn-editar {
+    background-color: #2fb38b; 
+    color: #FFFFFF;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    margin-right: 10px; 
+}
+
+.btn-eliminar {
+    background-color: #FF5555; 
+    color: #FFFFFF;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.btn-editar:hover {
+    background-color: #33CC99; 
+}
+
+.btn-eliminar:hover {
+    background-color: #FF7777; 
+}
