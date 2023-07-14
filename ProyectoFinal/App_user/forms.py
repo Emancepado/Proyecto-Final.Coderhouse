@@ -69,8 +69,3 @@ class productoForm(forms.ModelForm):
 
 
 
-class VentaForm(forms.Form):
-    producto = forms.ModelChoiceField(queryset=producto.objects.all(), label='Producto')
-    cantidad = forms.IntegerField(label='Cantidad')
-
-VentaFormSet = formset_factory(VentaForm, extra=1)

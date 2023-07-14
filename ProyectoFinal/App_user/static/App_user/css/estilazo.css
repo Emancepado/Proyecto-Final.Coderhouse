@@ -43,6 +43,9 @@
     cursor: pointer;
     text-decoration: none;
     margin-right: 10px; 
+    display: block;
+    width: auto;
+    margin-bottom: 10px;
 }
 
 .btn-eliminar {
@@ -53,6 +56,9 @@
     border-radius: 5px;
     cursor: pointer;
     text-decoration: none;
+    display: block;
+    width: auto;
+    margin-bottom: 10px;
 }
 
 .btn-editar:hover {

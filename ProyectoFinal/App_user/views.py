@@ -1,12 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import RegistroForm, UserEditForm, UserChangePassword, AvatarForm, productoForm, AvatarDescriptionForm, VentaForm, VentaFormSet, formset_factory
+from .forms import RegistroForm, UserEditForm, UserChangePassword, AvatarForm, productoForm, AvatarDescriptionForm
 from .models import Avatar, producto as Productos 
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout, update_session_auth_hash
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
-from django.forms.formsets import BaseFormSet
 # Create your views here.
 
 def registration(request):
@@ -176,7 +175,7 @@ def editarProducto(request, producto_id):
     producto = get_object_or_404(Productos, id=producto_id, usuario=request.user)
 
     if request.method == 'POST':
-        form = productoForm(request.POST, instance=producto)
+        form = productoForm(request.POST, request.FILES, instance=producto)
         if form.is_valid():
             form.save()
             messages.success(request, 'Producto actualizado exitosamente.')
@@ -186,27 +185,3 @@ def editarProducto(request, producto_id):
 
     return render(request, 'App_user/editarProducto.html', {'form': form, 'avatar': avatar})
 
-@login_required
-def ventas(request):
-    ProductoFormSet = formset_factory(VentaForm, extra=1)
-
-    if request.method == 'POST':
-        formset = ProductoFormSet(request.POST)
-        if formset.is_valid():
-            for form in formset:
-                producto_id = form.cleaned_data['producto']
-                cantidad = form.cleaned_data['cantidad']
-
-                producto = Productos.objects.get(id=producto_id)
-                if cantidad <= producto.stock:
-                    producto.stock -= cantidad
-                    producto.save()
-                    mensaje = 'Venta realizada con éxito.'
-                else:
-                    mensaje = 'No hay suficiente stock disponible para realizar la venta.'
-            
-            return render(request, 'App_user/ventas.html', {'formset': formset, 'mensaje': mensaje})
-    else:
-        formset = ProductoFormSet()
-
-    return render(request, 'App_user/ventas.html', {'formset': formset})

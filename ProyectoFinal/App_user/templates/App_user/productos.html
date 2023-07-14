@@ -54,8 +54,11 @@
                         <td>{{ producto.precio_producto }}</td>
                         <td>{{ producto.created_at }}</td>
                         <td>
-                            <img src="{{ producto.imagen_producto.url }}" alt="" style="max-width: 100px; max-height: 100px">
-                            
+                            {% if producto.imagen_producto %}
+                                <img src="{{ producto.imagen_producto.url }}" alt="" style="max-width: 100px; max-height: 100px">
+                            {% else %}
+                                <p>No hay imagen asociada</p>
+                            {% endif %}  
                         </td>
                         <td>
                             <a href="{% url 'editarProducto' producto.id %}" class="btn-editar">Editar Producto</a>
