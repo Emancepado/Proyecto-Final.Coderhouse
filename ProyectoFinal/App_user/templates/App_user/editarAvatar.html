@@ -20,6 +20,11 @@
             <img src="{{ avatar }}" alt="Avatar">
         {% endif %}
 
+        {{ form2.field1.label_tag }}
+        {{ form2.field1 }}
+        {{ form2.field2.label_tag }}
+        {{ form2.field2 }}
+
         <input type="submit" value="Confirmar edición" class="btn btn-success">
     </form>
 {% endblock %}

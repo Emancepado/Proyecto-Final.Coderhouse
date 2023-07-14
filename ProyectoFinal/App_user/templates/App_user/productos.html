@@ -20,7 +20,7 @@
     </style>
 
     <p>Crear producto</p>
-    <form action="{% url 'productos' %}" method="post"> 
+    <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <table>
             {{ form.as_p }}
@@ -40,6 +40,7 @@
                     <th>Stock</th>
                     <th>Precio</th>
                     <th>Fecha de creación</th>
+                    <th>Imagen del producto</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -52,6 +53,8 @@
                         <td>{{ producto.stock_producto }}</td>
                         <td>{{ producto.precio_producto }}</td>
                         <td>{{ producto.created_at }}</td>
+                        <td><img src="{{producto.imagen_producto}}" alt=""></td>
+
                         <td>
                             <form action="{% url 'borrarProducto' producto.id %}" method="post">
                                 {% csrf_token %}

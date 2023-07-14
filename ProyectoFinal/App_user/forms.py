@@ -49,6 +49,8 @@ class UserChangePassword(PasswordChangeForm):
 
 class AvatarForm(forms.Form):
     avatar = forms.ImageField(required= False)
+
+class AvatarDescriptionForm(forms.Form):
     description = forms.CharField(widget= forms.Textarea(attrs={"placeholder": "Descripcion del negocio con vista al publico"}), label= "Descripcion del negocio con vista al publico", required= False)
 
 

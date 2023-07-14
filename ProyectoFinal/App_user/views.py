@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import RegistroForm, UserEditForm, UserChangePassword, AvatarForm, productoForm
+from .forms import RegistroForm, UserEditForm, UserChangePassword, AvatarForm, productoForm, AvatarDescriptionForm
 from .models import Avatar, producto as Productos 
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout, update_session_auth_hash
@@ -107,21 +107,20 @@ def editarContraseña(request):
 
 @login_required
 def editarAvatar(request):
-    
     if request.method == 'POST':
         form = AvatarForm(request.POST, request.FILES)
-        if form.is_valid():
-            usuario = User.objects.get(username = request.user)
-            avatar = Avatar(user = usuario, image = form.cleaned_data['avatar'], description = form.cleaned_data['description'])
+        form2 = AvatarDescriptionForm(request.POST)
+        if form.is_valid() and form2.is_valid():
+            usuario = User.objects.get(username=request.user)
+            avatar = Avatar(user=usuario, image=form.cleaned_data['avatar'], description=form2.cleaned_data['description'])
             avatar.save()
             messages.success(request, '¡Avatar actualizado exitosamente!')
-            avatar = Avatar.objects.filter(user = request.user.id)
             return redirect('../editarPerfil')
-    
     else:
         form = AvatarForm()
+        form2 = AvatarDescriptionForm()
         avatar = getAvatar(request)
-    return render(request, 'App_user/editarAvatar.html', {'form': form, 'avatar': avatar})
+    return render(request, 'App_user/editarAvatar.html', {'form': form, 'form2': form2, 'avatar': avatar})
 
 
 
@@ -144,9 +143,8 @@ def crearProducto(request):
     if request.method == 'POST':
         miFormulario = productoForm(request.POST)
         if miFormulario.is_valid():
-            producto = miFormulario.save(commit=False) 
-            producto.usuario = request.user  
-            producto.save()  
+            print(request.POST)
+            miFormulario.save()
             messages.success(request, "Producto registrado exitosamente") 
             return redirect('productos')
     productos = Productos.objects.all()
