@@ -1,5 +1,7 @@
 from django.db import models
+from django.utils import timezone
 from django.contrib.auth.models import User
+
 
 # Create your models here.
 
@@ -17,12 +19,13 @@ class Avatar(models.Model):
 
 class producto(models.Model):
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
-    nombre_producto = models.CharField(max_length=40)
     bars_code = models.IntegerField(null=True, blank=True)
+    nombre_producto = models.CharField(max_length=40)
     descripcion_producto = models.CharField(max_length=200)
     stock_producto = models.IntegerField()
     precio_producto = models.FloatField()
-    imagen_producto = models.ImageField(upload_to='productos/', blank=True, null=True)
+    imagen_producto = models.ImageField(upload_to='productos', blank=True, null=True)
+    created_at = models.DateTimeField(default=timezone.now)
 
 
 

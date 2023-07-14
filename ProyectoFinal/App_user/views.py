@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect
-from .forms import RegistroForm, UserEditForm, UserChangePassword, AvatarForm
+from .forms import RegistroForm, UserEditForm, UserChangePassword, AvatarForm, productoForm
 from .models import Avatar
-from django.shortcuts import get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout, update_session_auth_hash
 from django.contrib.auth.models import User
@@ -129,3 +128,18 @@ def editarAvatar(request):
 def getAvatar(request):
     avatar = Avatar.objects.filter(user=request.user).first()
     return avatar
+
+
+@login_required
+def crearProducto(request):
+    if request.method == 'POST':
+        miFormulario = productoForm(request.POST)
+        if miFormulario.is_valid():
+            producto = miFormulario.save(commit=False) 
+            producto.usuario = request.user  
+            producto.save()  
+            messages.success(request, "Producto registrado exitosamente") 
+            return redirect('productos')
+
+    miFormulario = productoForm()
+    return render(request, 'App_user/productos.html', {'form': miFormulario})

@@ -1,0 +1,14 @@
+{% extends 'App_user/base.html' %}
+{% load static %}
+
+{% block metamorphosis %}
+    <p>Crear producto </p>
+    <form action="{% url 'productos' %}" method="post"> 
+        {% csrf_token %}
+        <table>
+            {{form.as_p}}
+        </table>
+        <input type="submit" value="Enviar">
+        
+    </form>
+{% endblock %}
