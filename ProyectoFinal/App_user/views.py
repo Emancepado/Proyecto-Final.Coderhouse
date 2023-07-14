@@ -165,3 +165,20 @@ def borrarProducto(request, producto_id):
         messages.error(request, 'No tienes permiso para eliminar este producto.')
     return redirect('productos')
 
+
+@login_required
+def editarProducto(request, producto_id):
+    avatar = getAvatar(request)
+    producto = get_object_or_404(Productos, id=producto_id, usuario=request.user)
+
+    if request.method == 'POST':
+        form = productoForm(request.POST, instance=producto)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Producto actualizado exitosamente.')
+            return redirect('productos')
+    else:
+        form = productoForm(instance=producto)
+
+    return render(request, 'App_user/editarProducto.html', {'form': form, 'avatar': avatar})
+
