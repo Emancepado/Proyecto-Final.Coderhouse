@@ -48,12 +48,18 @@ class UserChangePassword(PasswordChangeForm):
 
 
 class AvatarForm(forms.Form):
-    avatar = forms.ImageField()
-    description = forms.CharField(widget= forms.Textarea(attrs={"placeholder": "Descripcion del negocio con vista al publico"}), label= "Descripcion del negocio con vista al publico")
+    avatar = forms.ImageField(required= False)
+    description = forms.CharField(widget= forms.Textarea(attrs={"placeholder": "Descripcion del negocio con vista al publico"}), label= "Descripcion del negocio con vista al publico", required= False)
 
 
 
 class productoForm(forms.ModelForm):
+    id = forms.IntegerField(widget=forms.HiddenInput(), required=False)
+
     class Meta:
         model = producto
-        fields = ['bars_code', 'nombre_producto', 'descripcion_producto', 'stock_producto', 'precio_producto', 'imagen_producto']
+        fields = ['id', 'bars_code', 'nombre_producto', 'descripcion_producto', 'stock_producto', 'precio_producto', 'imagen_producto']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['imagen_producto'].required = False

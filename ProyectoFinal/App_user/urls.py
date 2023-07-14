@@ -6,10 +6,11 @@ urlpatterns = [
     path('', views.loginWeb, name='login' ),
     path('home/', views.home, name = 'home'),
     path('logout/', views.logout_view, name = 'logout'),
-    path('editarPerfil', views.editarPerfil, name='editarPerfil'),
-    path('editarContraseña', views.editarContraseña, name='editarContraseña'),
-    path('editarAvatar', views.editarAvatar, name='editarAvatar'),
-    path('productos/', views.crearProducto, name='productos')
+    path('editarPerfil/', views.editarPerfil, name='editarPerfil'),
+    path('editarContraseña/', views.editarContraseña, name='editarContraseña'),
+    path('editarAvatar/', views.editarAvatar, name='editarAvatar'),
+    path('productos/', views.crearProducto, name='productos'),
+    path('productos/borrar/<int:producto_id>/', views.borrarProducto, name='borrarProducto')
     
 
 

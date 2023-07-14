@@ -18,7 +18,8 @@ class Avatar(models.Model):
     description = models.TextField(max_length=500, null=True, blank=True)
 
 class producto(models.Model):
-    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE, default = 1)
+    id = models.AutoField(primary_key=True)
     bars_code = models.IntegerField(null=True, blank=True)
     nombre_producto = models.CharField(max_length=40)
     descripcion_producto = models.CharField(max_length=200)
@@ -26,7 +27,6 @@ class producto(models.Model):
     precio_producto = models.FloatField()
     imagen_producto = models.ImageField(upload_to='productos', blank=True, null=True)
     created_at = models.DateTimeField(default=timezone.now)
-
 
 
     

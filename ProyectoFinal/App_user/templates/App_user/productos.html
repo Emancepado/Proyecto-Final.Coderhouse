@@ -2,13 +2,67 @@
 {% load static %}
 
 {% block metamorphosis %}
-    <p>Crear producto </p>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        th {
+            border-right: 1px solid #ddd;
+        }
+    </style>
+
+    <p>Crear producto</p>
     <form action="{% url 'productos' %}" method="post"> 
         {% csrf_token %}
         <table>
-            {{form.as_p}}
+            {{ form.as_p }}
         </table>
-        <input type="submit" value="Enviar">
-        
+        <input type="submit" value="Enviar">    
     </form>
+    
+    <br><br> 
+    <h2>Productos Creados</h2>
+    {% if productos %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Codigo de barras</th>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                    <th>Stock</th>
+                    <th>Precio</th>
+                    <th>Fecha de creación</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for producto in productos %}
+                    <tr>
+                        <td>{{ producto.bars_code }}</td>
+                        <td>{{ producto.nombre_producto }}</td>
+                        <td>{{ producto.descripcion_producto }}</td>
+                        <td>{{ producto.stock_producto }}</td>
+                        <td>{{ producto.precio_producto }}</td>
+                        <td>{{ producto.created_at }}</td>
+                        <td>
+                            <form action="{% url 'borrarProducto' producto.id %}" method="post">
+                                {% csrf_token %}
+                                <input type="submit" value="Eliminar">
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No se han creado productos.</p>
+    {% endif %}
 {% endblock %}

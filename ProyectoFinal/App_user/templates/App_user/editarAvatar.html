@@ -3,7 +3,7 @@
 
 {% block metamorphosis %}
     <h3>Editar Perfil del negocio</h3>
-    <h4>{{user.last_name}}</h4>
+    <h4>{{ user.last_name }}</h4>
 
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
@@ -16,6 +16,10 @@
         {{ form.description }}
         <br><br>
         
+        {% if has_image %}
+            <img src="{{ avatar }}" alt="Avatar">
+        {% endif %}
+
         <input type="submit" value="Confirmar edición" class="btn btn-success">
     </form>
 {% endblock %}

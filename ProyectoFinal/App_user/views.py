@@ -1,6 +1,6 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .forms import RegistroForm, UserEditForm, UserChangePassword, AvatarForm, productoForm
-from .models import Avatar
+from .models import Avatar, producto as Productos 
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout, update_session_auth_hash
 from django.contrib.auth.models import User
@@ -58,6 +58,7 @@ def logout_view(request):
 
 @login_required
 def editarPerfil(request):
+    avatar = getAvatar(request)
     usuario = request.user
     user_basic_info = User.objects.get(id=usuario.id)
     if request.method == "POST":
@@ -78,12 +79,13 @@ def editarPerfil(request):
             return render(request, 'App_user/editarPerfil.html', {"form": form })
     else:
         form = UserEditForm(initial={'username': usuario.username, 'email': usuario.email, 'first_name': usuario.first_name, 'last_name': usuario.last_name})
-        return render(request, 'App_user/editarPerfil.html', {"form": form})
+        return render(request, 'App_user/editarPerfil.html', {"form": form, "avatar": avatar})
     
 
 
 @login_required
 def editarContraseña(request):
+    avatar = getAvatar(request)
     usuario = request.user 
     if request.method == 'POST':
         form = UserChangePassword(data=request.POST, user=usuario)
@@ -99,39 +101,46 @@ def editarContraseña(request):
             return redirect('../editarContraseña')
     else: 
         form = UserChangePassword(user=usuario)
-        return render(request, 'App_user/editarContraseña.html', {"form": form})
+        return render(request, 'App_user/editarContraseña.html', {"form": form, "avatar": avatar})
     
 
 
 @login_required
 def editarAvatar(request):
-    avatar = getAvatar(request)
-    if avatar is None:
-        avatar = Avatar(user=request.user)
     
     if request.method == 'POST':
         form = AvatarForm(request.POST, request.FILES)
         if form.is_valid():
-            avatar.image = form.cleaned_data['avatar']
-            avatar.description = form.cleaned_data['description']
+            usuario = User.objects.get(username = request.user)
+            avatar = Avatar(user = usuario, image = form.cleaned_data['avatar'], description = form.cleaned_data['description'])
             avatar.save()
             messages.success(request, '¡Avatar actualizado exitosamente!')
+            avatar = Avatar.objects.filter(user = request.user.id)
             return redirect('../editarPerfil')
     
     else:
-        form = AvatarForm(initial={'avatar': avatar.image if avatar else None, 'description': avatar.description if avatar else None})
-    
+        form = AvatarForm()
+        avatar = getAvatar(request)
     return render(request, 'App_user/editarAvatar.html', {'form': form, 'avatar': avatar})
 
 
 
+
+@login_required
 def getAvatar(request):
-    avatar = Avatar.objects.filter(user=request.user).first()
+    avatar = Avatar.objects.filter(user=request.user.id)
+    try:
+        avatar = avatar[0].image.url
+    
+    except:
+        avatar = None
+
     return avatar
 
 
 @login_required
 def crearProducto(request):
+    avatar = getAvatar(request)
     if request.method == 'POST':
         miFormulario = productoForm(request.POST)
         if miFormulario.is_valid():
@@ -140,6 +149,21 @@ def crearProducto(request):
             producto.save()  
             messages.success(request, "Producto registrado exitosamente") 
             return redirect('productos')
+    productos = Productos.objects.all()
 
     miFormulario = productoForm()
-    return render(request, 'App_user/productos.html', {'form': miFormulario})
+    return render(request, 'App_user/productos.html', {'form': miFormulario, "avatar": avatar, "productos": productos})
+
+
+
+
+@login_required
+def borrarProducto(request, producto_id):
+    producto = get_object_or_404(Productos, id=producto_id)
+    if producto.usuario == request.user:
+        producto.delete()
+        messages.success(request, 'Producto eliminado exitosamente.')
+    else:
+        messages.error(request, 'No tienes permiso para eliminar este producto.')
+    return redirect('productos')
+
