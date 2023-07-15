@@ -70,10 +70,11 @@ class productoForm(forms.ModelForm):
 
 
 class ventaForm(forms.ModelForm):
+    producto = forms.ModelChoiceField(queryset=producto.objects.all(), to_field_name='id', widget=forms.Select(attrs={'class': 'form-control'}))
+
     class Meta:
         model = Venta
-        fields = ['Producto', 'cantidad']
+        fields = ['producto', 'cantidad']
         widgets = {
-            'Producto': forms.Select(attrs={'class': 'form-control'}),
             'cantidad': forms.NumberInput(attrs={'class': 'form-control'}),
         }

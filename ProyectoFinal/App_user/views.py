@@ -197,10 +197,10 @@ def venta(request):
             producto.stock_producto -= venta.cantidad
             producto.save()
             venta.save()
-            return render(request, 'ventas.html', {'form': form})
+            return render(request, 'App_user/ventas.html', {'form': form})
     elif request.method == 'GET':
         form = ventaForm()
-        return render(request, 'ventas.html', {'form': form})
+        return render(request, 'App_user/ventas.html', {'form': form})
     else:
         return HttpResponseNotAllowed(['GET', 'POST'])
 
