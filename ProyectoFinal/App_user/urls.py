@@ -12,7 +12,7 @@ urlpatterns = [
     path('productos/', views.crearProducto, name='productos'),
     path('productos/borrar/<int:producto_id>/', views.borrarProducto, name='borrarProducto'),
     path('productos/editar/<int:producto_id>/', views.editarProducto, name='editarProducto'),
-    path('ventas/', views.ventaForm, name='ventas')
+    path('ventas/', views.venta, name='ventas')
     
 
     

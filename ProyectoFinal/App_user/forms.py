@@ -74,6 +74,6 @@ class ventaForm(forms.ModelForm):
         model = Venta
         fields = ['Producto', 'cantidad']
         widgets = {
-            'producto': forms.Select(attrs={'class': 'form-control'}),
+            'Producto': forms.Select(attrs={'class': 'form-control'}),
             'cantidad': forms.NumberInput(attrs={'class': 'form-control'}),
         }

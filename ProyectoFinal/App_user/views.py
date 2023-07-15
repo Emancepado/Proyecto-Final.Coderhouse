@@ -6,6 +6,7 @@ from django.contrib.auth import login, authenticate, logout, update_session_auth
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseNotAllowed
 # Create your views here.
 
 def registration(request):
@@ -191,12 +192,15 @@ def venta(request):
     if request.method == 'POST':
         form = ventaForm(request.POST)
         if form.is_valid():
-            venta = form.save()
+            venta = form.save(commit=False)
             producto = venta.producto
             producto.stock_producto -= venta.cantidad
             producto.save()
-            return render(request, 'venta.html', {'form': form})
-    else:
+            venta.save()
+            return render(request, 'ventas.html', {'form': form})
+    elif request.method == 'GET':
         form = ventaForm()
-    return render(request, 'venta.html', {'form': form})
+        return render(request, 'ventas.html', {'form': form})
+    else:
+        return HttpResponseNotAllowed(['GET', 'POST'])
 
