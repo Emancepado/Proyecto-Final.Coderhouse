@@ -16,6 +16,7 @@
     <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
         <div class="container-fluid">
             <a class="navbar-brand" href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">Facturance</a>
+            {% if user.username %}
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -27,7 +28,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <img src="{{avatar}}" width="30px" height="" alt="Avatar">
+                        <img src="{{user.avatar.image.url}}" width="30px" height="" alt="Avatar">
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/productos">Productos</a>
@@ -38,18 +39,29 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="" role="button" aria-haspopup="true" aria-expanded="false">Mi Pagina Web</a>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="{% url 'vistaClientes' user.username %}">Vista clientes</a>
+                            
+                            <a class="dropdown-item" href="{% url 'vistaClientes' user.id %}">Vista clientes</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="#">Hacer un posteo</a>
                             <a class="dropdown-item" href="#">Editar productos visibles</a>
+            
                         </div>
                     </li>
                 </ul>
                 <ul class="nav-link active">
+                    
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'logout' %}">Logout</a>
                     </li>
+                </ul>  
+                {% else %}
+                <ul class="nav-link active">
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}">Login</a>
+                    </li>
                 </ul>            
+            {% endif %}
             </div>
         </div>
     </nav>

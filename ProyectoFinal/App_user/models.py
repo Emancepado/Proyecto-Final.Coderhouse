@@ -14,7 +14,7 @@ class usuario(models.Model):
 
 
 class Avatar(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='avatares', null=True, blank=True)
     description = models.TextField(blank=True)
 
@@ -35,7 +35,7 @@ class Producto(models.Model):
 
 class Venta(models.Model):
     producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
-    cantidad = models.IntegerField()
+    cantidad = models.IntegerField(default=0)
 
     def clean(self):
         super().clean()
@@ -45,5 +45,6 @@ class Venta(models.Model):
     @property
     def valor_total(self):
         return self.producto.precio_producto * self.cantidad
-        
+    
+
 

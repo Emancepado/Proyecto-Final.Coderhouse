@@ -9,6 +9,9 @@ from django.contrib.auth.decorators import login_required
 from django.forms import formset_factory
 
 # Create your views here.
+def invitado(request):
+    usuario = User.objects.all()
+    return render(request, 'App_user/invitados.html', {'users': usuario})
 
 def registration(request):
     if request.method == 'POST':
@@ -50,9 +53,7 @@ def loginWeb(request):
 
 @login_required    
 def home(request):
-    avatar = getAvatar(request)
-    description = getDescription(request)
-    return render(request, "App_user/home.html",{"avatar": avatar, 'description': description})
+    return render(request, "App_user/home.html")
 
 @login_required
 def logout_view(request):
@@ -210,9 +211,12 @@ def venta(request):
                 venta = form.save(commit=False)
                 if form.cleaned_data.get('producto'):
                     producto = venta.producto
-                    producto.stock_producto -= venta.cantidad
-                    producto.save()
-                    venta.save()
+                    if producto.stock_producto < venta.cantidad:
+                        messages.error(request, f"Error en el formulario: No hay stock suficiente")
+                    else:   
+                        producto.stock_producto -= venta.cantidad
+                        producto.save()
+                        venta.save()
                 else:
                     venta_exitosa = False  
                     messages.error(request, f"Error en el formulario: Debe seleccionar un producto")
@@ -230,9 +234,10 @@ def venta(request):
     return render(request, 'App_user/ventas.html', {'formset': formset, 'avatar': avatar})
 
 
-def vistaClientes(request, username):
-    usuario = get_object_or_404(User, username=username)
-    return render(request, 'App_user/vistaClientes.html', {'usuario': usuario})
+def vistaClientes(request, id):
+    usuario = get_object_or_404(User, id = id)
+    productos = Productos.objects.filter(usuario_id = id)
+    return render(request, 'App_user/vistaClientes.html', {'usuario': usuario, 'productos': productos })
 
 
 
