@@ -7,3 +7,4 @@ from .models import *
 admin.site.register(usuario)
 admin.site.register(Producto)
 admin.site.register(Avatar)
+admin.site.register(Venta)

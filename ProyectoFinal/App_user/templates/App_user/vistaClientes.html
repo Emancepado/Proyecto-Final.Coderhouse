@@ -1,0 +1,9 @@
+{% extends 'App_user/base.html' %}
+{% load static %}
+
+{% block metamorphosis %}
+  <h3>Página de {{ usuario.username }}</h3>
+  <p>Descripción del negocio: {{ usuario.avatar.description }}</p>
+  <img src="{{ usuario.avatar.image.url }}" alt="Foto de perfil">
+  <p>Email de contacto: {{usuario.Email}}</p>
+{% endblock %}

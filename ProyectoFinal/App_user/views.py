@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.forms import formset_factory
+
 # Create your views here.
 
 def registration(request):
@@ -50,7 +51,8 @@ def loginWeb(request):
 @login_required    
 def home(request):
     avatar = getAvatar(request)
-    return render(request, "App_user/home.html",{"avatar": avatar})
+    description = getDescription(request)
+    return render(request, "App_user/home.html",{"avatar": avatar, 'description': description})
 
 @login_required
 def logout_view(request):
@@ -127,7 +129,14 @@ def editarAvatar(request):
     return render(request, 'App_user/editarAvatar.html', {'form': form, 'form2': form2, 'avatar': avatar})
 
 
-
+@login_required
+def getDescription(request):
+    avatar = Avatar.objects.filter(user = request.user.id).first()
+    if avatar.description:
+        return avatar.description
+    else:
+        return 'Actualmente no hay ninguna descripcion'
+    
 
 @login_required
 def getAvatar(request):
@@ -187,25 +196,48 @@ def editarProducto(request, producto_id):
     return render(request, 'App_user/editarProducto.html', {'form': form, 'avatar': avatar})
 
 
-
 @login_required
 def venta(request):
+    avatar = getAvatar(request)
     VentaFormSet = formset_factory(ventaForm, extra=1)
 
     if request.method == 'POST':
         formset = VentaFormSet(request.POST)
         if formset.is_valid():
+            venta_exitosa = True  
+
             for form in formset:
                 venta = form.save(commit=False)
-                producto = venta.producto
-                producto.stock_producto -= venta.cantidad
-                producto.save()
-                venta.save()
+                if form.cleaned_data.get('producto'):
+                    producto = venta.producto
+                    producto.stock_producto -= venta.cantidad
+                    producto.save()
+                    venta.save()
+                else:
+                    venta_exitosa = False  
+                    messages.error(request, f"Error en el formulario: Debe seleccionar un producto")
 
-            messages.success(request, '¡Venta exitosa!')
-            return redirect('ventas')
+            if venta_exitosa:
+                messages.success(request, '¡Venta exitosa!')
+                return redirect('ventas')
+
+        else:
+            messages.error(request, f"Error en el formulario: Debe seleccionar cantidad")
+
     else:
         formset = VentaFormSet()
 
-    return render(request, 'App_user/ventas.html', {'formset': formset})
+    return render(request, 'App_user/ventas.html', {'formset': formset, 'avatar': avatar})
 
+
+def vistaClientes(request, username):
+    usuario = get_object_or_404(User, username=username)
+    return render(request, 'App_user/vistaClientes.html', {'usuario': usuario})
+
+
+
+
+
+
+
+    

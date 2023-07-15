@@ -12,18 +12,13 @@
         <br>
         <br>
         <br>
-        {{ form.description.label_tag }}
-        {{ form.description }}
+        {{ form2.description.label_tag }}<br>  <!-- Agregar salto de línea aquí -->
+        {{ form2.description }}
         <br><br>
         
         {% if has_image %}
             <img src="{{ avatar }}" alt="Avatar">
         {% endif %}
-
-        {{ form2.field1.label_tag }}
-        {{ form2.field1 }}
-        {{ form2.field2.label_tag }}
-        {{ form2.field2 }}
 
         <input type="submit" value="Confirmar edición" class="btn btn-success">
     </form>

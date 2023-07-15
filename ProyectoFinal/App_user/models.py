@@ -16,7 +16,7 @@ class usuario(models.Model):
 class Avatar(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='avatares', null=True, blank=True)
-    description = models.TextField(max_length=500, null=True, blank=True)
+    description = models.TextField(blank=True)
 
 class Producto(models.Model):
     usuario = models.ForeignKey(User, on_delete=models.CASCADE, default = 1)
@@ -42,4 +42,8 @@ class Venta(models.Model):
         if self.cantidad is not None and self.cantidad > self.producto.stock_producto:
             raise ValidationError("La cantidad excede el stock disponible del producto.")
 
+    @property
+    def valor_total(self):
+        return self.producto.precio_producto * self.cantidad
+        
 
