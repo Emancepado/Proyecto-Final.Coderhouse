@@ -5,5 +5,5 @@ from .models import *
 
 
 admin.site.register(usuario)
-admin.site.register(producto)
+admin.site.register(Producto)
 admin.site.register(Avatar)

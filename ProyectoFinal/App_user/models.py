@@ -18,7 +18,7 @@ class Avatar(models.Model):
     image = models.ImageField(upload_to='avatares', null=True, blank=True)
     description = models.TextField(max_length=500, null=True, blank=True)
 
-class producto(models.Model):
+class Producto(models.Model):
     usuario = models.ForeignKey(User, on_delete=models.CASCADE, default = 1)
     id = models.AutoField(primary_key=True)
     bars_code = models.IntegerField(null=True, blank=True)
@@ -34,10 +34,12 @@ class producto(models.Model):
 
 
 class Venta(models.Model):
-    Producto = models.ForeignKey(producto, on_delete=models.CASCADE)
+    producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
     cantidad = models.IntegerField()
 
     def clean(self):
         super().clean()
-        if self.cantidad > self.producto.stock_producto:
+        if self.cantidad is not None and self.cantidad > self.producto.stock_producto:
             raise ValidationError("La cantidad excede el stock disponible del producto.")
+
+

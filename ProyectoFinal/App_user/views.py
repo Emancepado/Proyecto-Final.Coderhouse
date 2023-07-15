@@ -1,12 +1,12 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import RegistroForm, UserEditForm, UserChangePassword, AvatarForm, productoForm, AvatarDescriptionForm, ventaForm
-from .models import Avatar, producto as Productos 
+from .models import Avatar, Producto as Productos 
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout, update_session_auth_hash
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseNotAllowed
+from django.forms import formset_factory
 # Create your views here.
 
 def registration(request):
@@ -187,20 +187,25 @@ def editarProducto(request, producto_id):
     return render(request, 'App_user/editarProducto.html', {'form': form, 'avatar': avatar})
 
 
+
 @login_required
 def venta(request):
+    VentaFormSet = formset_factory(ventaForm, extra=1)
+
     if request.method == 'POST':
-        form = ventaForm(request.POST)
-        if form.is_valid():
-            venta = form.save(commit=False)
-            producto = venta.producto
-            producto.stock_producto -= venta.cantidad
-            producto.save()
-            venta.save()
-            return render(request, 'App_user/ventas.html', {'form': form})
-    elif request.method == 'GET':
-        form = ventaForm()
-        return render(request, 'App_user/ventas.html', {'form': form})
+        formset = VentaFormSet(request.POST)
+        if formset.is_valid():
+            for form in formset:
+                venta = form.save(commit=False)
+                producto = venta.producto
+                producto.stock_producto -= venta.cantidad
+                producto.save()
+                venta.save()
+
+            messages.success(request, '¡Venta exitosa!')
+            return redirect('ventas')
     else:
-        return HttpResponseNotAllowed(['GET', 'POST'])
+        formset = VentaFormSet()
+
+    return render(request, 'App_user/ventas.html', {'formset': formset})
 

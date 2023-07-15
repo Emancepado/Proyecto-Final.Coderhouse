@@ -2,7 +2,8 @@ from typing import Any, Dict
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordChangeForm
 from django.contrib.auth.models import User
-from .models import producto, Venta
+from .models import Producto, Venta
+from django.forms import formset_factory
 
 
 
@@ -60,7 +61,7 @@ class productoForm(forms.ModelForm):
     id = forms.IntegerField(widget=forms.HiddenInput(), required=False)
 
     class Meta:
-        model = producto
+        model = Producto
         fields = ['id', 'bars_code', 'nombre_producto', 'descripcion_producto', 'stock_producto', 'precio_producto', 'imagen_producto']
 
     def __init__(self, *args, **kwargs):
@@ -70,7 +71,7 @@ class productoForm(forms.ModelForm):
 
 
 class ventaForm(forms.ModelForm):
-    producto = forms.ModelChoiceField(queryset=producto.objects.all(), to_field_name='id', widget=forms.Select(attrs={'class': 'form-control'}))
+    producto = forms.ModelChoiceField(queryset=Producto.objects.all(), to_field_name='id', widget=forms.Select(attrs={'class': 'form-control'}))
 
     class Meta:
         model = Venta
@@ -78,3 +79,6 @@ class ventaForm(forms.ModelForm):
         widgets = {
             'cantidad': forms.NumberInput(attrs={'class': 'form-control'}),
         }
+
+
+VentaFormSet = formset_factory(ventaForm, extra=1)
