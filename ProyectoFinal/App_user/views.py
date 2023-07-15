@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import RegistroForm, UserEditForm, UserChangePassword, AvatarForm, productoForm, AvatarDescriptionForm
+from .forms import RegistroForm, UserEditForm, UserChangePassword, AvatarForm, productoForm, AvatarDescriptionForm, ventaForm
 from .models import Avatar, producto as Productos 
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout, update_session_auth_hash
@@ -184,4 +184,19 @@ def editarProducto(request, producto_id):
         form = productoForm(instance=producto)
 
     return render(request, 'App_user/editarProducto.html', {'form': form, 'avatar': avatar})
+
+
+@login_required
+def venta(request):
+    if request.method == 'POST':
+        form = ventaForm(request.POST)
+        if form.is_valid():
+            venta = form.save()
+            producto = venta.producto
+            producto.stock_producto -= venta.cantidad
+            producto.save()
+            return render(request, 'venta.html', {'form': form})
+    else:
+        form = ventaForm()
+    return render(request, 'venta.html', {'form': form})
 

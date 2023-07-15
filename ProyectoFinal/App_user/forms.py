@@ -2,8 +2,8 @@ from typing import Any, Dict
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordChangeForm
 from django.contrib.auth.models import User
-from .models import producto
-from django.forms import formset_factory
+from .models import producto, Venta
+
 
 
 class RegistroForm(UserCreationForm):
@@ -69,3 +69,11 @@ class productoForm(forms.ModelForm):
 
 
 
+class ventaForm(forms.ModelForm):
+    class Meta:
+        model = Venta
+        fields = ['Producto', 'cantidad']
+        widgets = {
+            'producto': forms.Select(attrs={'class': 'form-control'}),
+            'cantidad': forms.NumberInput(attrs={'class': 'form-control'}),
+        }

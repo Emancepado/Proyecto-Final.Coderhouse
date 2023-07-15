@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 
 
 # Create your models here.
@@ -27,6 +28,16 @@ class producto(models.Model):
     precio_producto = models.FloatField()
     imagen_producto = models.ImageField(upload_to='productos', blank=True, null=True)
     created_at = models.DateTimeField(default=timezone.now)
+        
+    def __str__(self):
+        return self.nombre_producto
 
 
-    
+class Venta(models.Model):
+    Producto = models.ForeignKey(producto, on_delete=models.CASCADE)
+    cantidad = models.IntegerField()
+
+    def clean(self):
+        super().clean()
+        if self.cantidad > self.producto.stock_producto:
+            raise ValidationError("La cantidad excede el stock disponible del producto.")

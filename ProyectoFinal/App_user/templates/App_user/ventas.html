@@ -1,73 +1,10 @@
-{% extends 'App_user/base.html' %}
-{% load static %}
+{% extends 'base.html' %}
 
 {% block metamorphosis %}
-    <style>
-        table {
-            border-collapse: collapse;
-            width: 100%;
-        }
-        
-        th, td {
-            padding: 8px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-        
-        th {
-            border-right: 1px solid #ddd;
-        }
-    </style>
-
-    <p style="font-size: 24px; font-weight: bold;">Realizar venta</p>
-    <form method="post">
-        {% csrf_token %}
-        {{ formset.management_form }}
-        <table>
-            <thead>
-                <tr>
-                    <th>Producto</th>
-                    <th>Cantidad</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for form in formset %}
-                    <tr>
-                        <td>{{ form.producto }}</td>
-                        <td>{{ form.cantidad }}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        <input type="submit" value="Realizar venta">    
-    </form>
-    
-    <br><br> 
-    <h2>Productos Disponibles</h2>
-    {% if productos %}
-        <table>
-            <thead>
-                <tr>
-                    <th>Código de barras</th>
-                    <th>Nombre</th>
-                    <th>Descripción</th>
-                    <th>Stock</th>
-                    <th>Precio</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for producto in productos %}
-                    <tr>
-                        <td>{{ producto.bars_code }}</td>
-                        <td>{{ producto.nombre_producto }}</td>
-                        <td>{{ producto.descripcion_producto }}</td>
-                        <td>{{ producto.stock_producto }}</td>
-                        <td>{{ producto.precio_producto }}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    {% else %}
-        <p>No hay productos disponibles.</p>
-    {% endif %}
+  <h1>Crear Venta</h1>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Guardar</button>
+  </form>
 {% endblock %}
