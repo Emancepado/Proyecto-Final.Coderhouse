@@ -27,8 +27,8 @@ La idea es proporcionar una plataforma amigable para el usuario con la funcional
 2. Instala las dependencias utilizando pip: `pip install django`
 
 ## Uso
+Video de youtube con explicacion basica del proyecto
 
-
-
+https://youtu.be/iCPWjcCoOUA 
 
 
