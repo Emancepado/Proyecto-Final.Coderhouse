@@ -167,7 +167,7 @@ def crearProducto(request):
             miFormulario.save()
             messages.success(request, "Producto registrado exitosamente") 
             return redirect('productos')
-    productos = Productos.objects.all()
+    productos = Productos.objects.filter(usuario = request.user)
 
     miFormulario = productoForm()
     return render(request, 'App_user/productos.html', {'form': miFormulario, "avatar": avatar, "productos": productos})
