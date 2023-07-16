@@ -12,12 +12,12 @@
         <br>
         <br>
         <br>
-        {{ form2.description.label_tag }}<br>  <!-- Agregar salto de línea aquí -->
+        {{ form2.description.label_tag }}<br>  
         {{ form2.description }}
         <br><br>
         
         {% if has_image %}
-            <img src="{{ avatar }}" alt="Avatar">
+            <img src="{{user.avatar.image.url}}" alt="Avatar">
         {% endif %}
 
         <input type="submit" value="Confirmar edición" class="btn btn-success">
