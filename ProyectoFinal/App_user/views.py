@@ -206,7 +206,7 @@ def editarProducto(request, producto_id):
 @login_required
 def venta(request):
     avatar = getAvatar(request)
-    VentaFormSet = formset_factory(ventaForm, extra=1)
+    VentaFormSet = formset_factory(ventaForm, extra=0)
 
     if request.method == 'POST':
         formset = VentaFormSet(request.POST)
@@ -235,7 +235,8 @@ def venta(request):
             messages.error(request, f"Error en el formulario: Debe seleccionar cantidad")
 
     else:
-        formset = VentaFormSet()
+        productos = Productos.objects.filter(usuario=request.user)
+        formset = VentaFormSet( initial=[{'producto': producto} for producto in productos])
 
     return render(request, 'App_user/ventas.html', {'formset': formset, 'avatar': avatar})
 
