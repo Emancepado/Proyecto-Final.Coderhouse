@@ -6,18 +6,12 @@
   <form method="POST">
     {% csrf_token %}
     
-    {{ formset.management_form }}
+    {{ form.producto.label_tag }}
+    {{ form.producto }}
+    {{ form.cantidad.label_tag }}
+    {{ form.cantidad }}
+    <p>Valor total: {{ form.instance.valor_total }}</p> 
     
-    {% for form in formset %}
-      <div class="venta-form">
-        {{ form.producto.label_tag }}
-        {{ form.producto }}
-        {{ form.cantidad.label_tag }}
-        {{ form.cantidad }}
-        <p>Valor total: {{ form.instance.valor_total }}</p> 
-      </div>
-    {% endfor %}
-  
     <input type="submit" value="Vender">
   </form>
   

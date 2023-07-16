@@ -202,43 +202,25 @@ def editarProducto(request, producto_id):
 
     return render(request, 'App_user/editarProducto.html', {'form': form, 'avatar': avatar})
 
-
 @login_required
 def venta(request):
-    avatar = getAvatar(request)
-    VentaFormSet = formset_factory(ventaForm, extra=0)
-
     if request.method == 'POST':
-        formset = VentaFormSet(request.POST)
-        if formset.is_valid():
-            venta_exitosa = True  
-
-            for form in formset:
-                venta = form.save(commit=False)
-                if form.cleaned_data.get('producto'):
-                    producto = venta.producto
-                    if producto.stock_producto < venta.cantidad:
-                        messages.error(request, f"Error en el formulario: No hay stock suficiente")
-                    else:   
-                        producto.stock_producto -= venta.cantidad
-                        producto.save()
-                        venta.save()
-                else:
-                    venta_exitosa = False  
-                    messages.error(request, f"Error en el formulario: Debe seleccionar un producto")
-
-            if venta_exitosa:
-                messages.success(request, '¡Venta exitosa!')
+        form = ventaForm(request.POST, user = request.user)
+        if form.is_valid():
+            producto = form.cleaned_data['producto']
+            cantidad = form.cleaned_data['cantidad']
+            if cantidad is not None and cantidad > producto.stock_producto:
+                form.add_error('cantidad', 'La cantidad solicitada supera el stock disponible')
+                messages.error(request, 'No hay suficiente stock para vender esa cantidad')
+            else:
+                producto.stock_producto -= cantidad
+                producto.save()
+                messages.success(request, 'Venta realizada con exito.')
                 return redirect('ventas')
-
-        else:
-            messages.error(request, f"Error en el formulario: Debe seleccionar cantidad")
-
     else:
-        productos = Productos.objects.filter(usuario=request.user)
-        formset = VentaFormSet( initial=[{'producto': producto} for producto in productos])
+        form = ventaForm(user = request.user)
 
-    return render(request, 'App_user/ventas.html', {'formset': formset, 'avatar': avatar})
+    return render(request, 'App_user/ventas.html', {'form': form})
 
 
 def vistaClientes(request, id):

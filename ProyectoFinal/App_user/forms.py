@@ -71,7 +71,7 @@ class productoForm(forms.ModelForm):
 
 
 class ventaForm(forms.ModelForm):
-    producto = forms.ModelChoiceField(queryset=Producto.objects.all(), to_field_name='id', widget=forms.Select(attrs={'class': 'form-control'}))
+    producto = forms.ModelChoiceField(queryset=Producto.objects.none(), to_field_name='id', widget=forms.Select(attrs={'class': 'form-control'}))
 
     class Meta:
         model = Venta
@@ -80,8 +80,11 @@ class ventaForm(forms.ModelForm):
             'cantidad': forms.NumberInput(attrs={'class': 'form-control'}),
         }
 
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user')
+        super().__init__(*args, **kwargs)
+        self.fields['producto'].queryset = Producto.objects.filter(usuario=user)
 
-VentaFormSet = formset_factory(ventaForm, extra=1)
 
 
 
