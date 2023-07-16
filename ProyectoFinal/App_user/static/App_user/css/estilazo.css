@@ -10,11 +10,11 @@
 
 .formLogin{
     font-weight: bold;
-    background: linear-gradient(45deg, rgb(4, 5, 31) 0%, rgb(194, 33, 181) 100%);
+    background: linear-gradient(45deg, rgb(4, 5, 31) 0%, rgb(64, 31, 184) 100%);
     padding: 40px 20px 20px 20px;
     border-radius: 5px;
-    width: 350px;
-    height: 400px;
+    width: auto;
+    height: auto;
 
 }
 .formLogin div{
@@ -28,4 +28,43 @@
     border-radius: 5px;
     border: 1px solid rebeccapurple;
     width: 90%;
+}
+
+.alert-error{
+    background-color: #e74c3c !important; 
+}
+
+.btn-editar {
+    background-color: #2fb38b; 
+    color: #FFFFFF;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    margin-right: 10px; 
+    display: block;
+    width: auto;
+    margin-bottom: 10px;
+}
+
+.btn-eliminar {
+    background-color: #FF5555; 
+    color: #FFFFFF;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    display: block;
+    width: auto;
+    margin-bottom: 10px;
+}
+
+.btn-editar:hover {
+    background-color: #33CC99; 
+}
+
+.btn-eliminar:hover {
+    background-color: #FF7777; 
 }

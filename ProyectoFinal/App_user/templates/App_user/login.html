@@ -10,24 +10,29 @@
         <title>Bienvenido a Facturance</title>
     </head>
 <body>
+    {% if messages %}
+    <div class="container mt-4">
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+    {% endif %}
     <div class="containerForm"> 
-        <form action="" method="POST" class="formLogin"> {% csrf_token %}
-            <h3 style="color: white; font-weight:bold; margin-bottom: 30px; display: flex; justify-content: center; align-items: center;">Facturance</h3>
-            <div>
-                <input name="user" type="text" placeholder="User" class="inputLogin">
-            </div>
-            <div>
-                <input name="password" type="password" placeholder="Password" class="inputLogin">
-            </div>
-            <div>
-                <button class="btn btn-primary" type="submit">Login</button>
-            </div>
-            {% if error %}
-                <p style="color: red;">{{error}}</p>
-            {% endif %}
-            <p style="color: white;">Aun no tienes una cuenta? <a href="/registration/"> Registrate</a></p>
-            <p style="color: white;">Eres un cliente?<a href="/home/"> Ingresa como invitado</a></p>
+        <form action="{% url 'login' %}" method="POST" class="formLogin">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div>
+            <button class="btn btn-primary" type="submit">Login</button>
+        </div>
+        {% if error %}
+            <p style="color: red;">{{ error }}</p>
+        {% endif %}
+        <p style="color: white;">¿Aún no tienes una cuenta? <a href="/registration/">Regístrate</a></p>
+        <p style="color: white;">¿Eres un cliente? <a href="invitados/">Ingresa como invitado</a></p>
         </form>
+
     </div>
 </body>
 </html>

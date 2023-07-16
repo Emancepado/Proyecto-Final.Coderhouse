@@ -1,0 +1,49 @@
+{% extends 'App_user/base.html' %}
+{% load static %}
+
+{% block metamorphosis %}
+  <h3>Página de {{ usuario.last_name }}</h3>
+  <p>Descripción del negocio: {{ usuario.avatar.description }}</p>
+  <img src="{{ usuario.avatar.image.url }}" alt="Foto de perfil"  width="150px" height="auto"   >
+  <p>Email de contacto: {{usuario.email}}</p>
+
+  <h2>Productos de {{usuario.last_name}}</h2>
+  {% if productos %}
+      <table>
+          <thead>
+              <tr>
+                  <th>Codigo de barras</th>
+                  <th>Nombre</th>
+                  <th>Descripción</th>
+                  <th>Stock</th>
+                  <th>Precio</th>
+                  <th>Fecha de creación</th>
+                  <th>Imagen del producto</th>
+                  <th>Acciones</th>
+              </tr>
+          </thead>
+          <tbody>
+              {% for producto in productos %}
+                  <tr>
+                      <td>{{ producto.bars_code }}</td>
+                      <td>{{ producto.nombre_producto }}</td>
+                      <td>{{ producto.descripcion_producto }}</td>
+                      <td>{{ producto.stock_producto }}</td>
+                      <td>{{ producto.precio_producto }}</td>
+                      <td>{{ producto.created_at }}</td>
+                      <td>
+                          {% if producto.imagen_producto %}
+                              <img src="{{ producto.imagen_producto.url }}" alt="" style="max-width: 100px; max-height: 100px">
+                          {% else %}
+                              <p>No hay imagen asociada</p>
+                          {% endif %}  
+                      </td>                       
+                  </tr>
+              {% endfor %}
+          </tbody>
+      </table>
+  {% else %}
+      <p>{{usuario.last_name}} no tiene productos</p>
+  {% endif %}
+{% endblock %}
+
