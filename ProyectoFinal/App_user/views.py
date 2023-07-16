@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import RegistroForm, UserEditForm, UserChangePassword, AvatarForm, productoForm, AvatarDescriptionForm, ventaForm
-from .models import Avatar, Producto as Productos 
+from .forms import RegistroForm, UserEditForm, UserChangePassword, AvatarForm, productoForm, AvatarDescriptionForm, ventaForm, posteoForm
+from .models import Avatar, Producto as Productos, Posteos
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout, update_session_auth_hash
 from django.contrib.auth.models import User
@@ -244,7 +244,25 @@ def venta(request):
 def vistaClientes(request, id):
     usuario = get_object_or_404(User, id = id)
     productos = Productos.objects.filter(usuario_id = id)
-    return render(request, 'App_user/vistaClientes.html', {'usuario': usuario, 'productos': productos })
+    posteos = Posteos.objects.filter(usuario = usuario)
+    return render(request, 'App_user/vistaClientes.html', {'usuario': usuario, 'productos': productos, 'posteos':posteos })
+
+
+
+@login_required
+def crearPosteo(request, id):
+    avatar = getAvatar(request)
+    if request.method == 'POST':
+        posteoform =  posteoForm(request.POST   , request.FILES)
+        if posteoform.is_valid():
+            posteo = posteoform.save(commit=False)
+            posteo.usuario = request.user
+            posteo.save()
+            return redirect('vistaClientes', id = id)
+    else:
+        posteoform = posteoForm()
+
+    return render(request, 'App_user/crearPosteo.html', {'posteoform':posteoform, 'avatar':avatar })
 
 
 

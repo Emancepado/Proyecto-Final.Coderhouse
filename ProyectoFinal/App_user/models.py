@@ -55,3 +55,12 @@ class Venta(models.Model):
     
 
 
+class Posteos(models.Model):
+    usuario = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        default=get_user_model()
+    )
+    contenido = models.TextField(max_length=500)
+    imagen = models.ImageField(blank=True, null=True)
+    created_at = models.DateTimeField(default=timezone.now)

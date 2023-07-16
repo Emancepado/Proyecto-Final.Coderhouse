@@ -2,7 +2,7 @@ from typing import Any, Dict
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordChangeForm
 from django.contrib.auth.models import User
-from .models import Producto, Venta
+from .models import Producto, Venta, Posteos
 from django.forms import formset_factory
 
 
@@ -82,3 +82,13 @@ class ventaForm(forms.ModelForm):
 
 
 VentaFormSet = formset_factory(ventaForm, extra=1)
+
+
+
+class posteoForm(forms.ModelForm):
+    class Meta:
+        model = Posteos
+        fields = ["contenido", 'imagen']
+        widgets = {
+            'contenido': forms.Textarea()
+        }
