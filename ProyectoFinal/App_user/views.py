@@ -9,6 +9,9 @@ from django.contrib.auth.decorators import login_required
 from django.forms import formset_factory
 
 # Create your views here.
+def get_default_user():
+    return User.objects.get(id=1)
+
 def invitado(request):
     usuario = User.objects.all()
     return render(request, 'App_user/invitados.html', {'users': usuario})
@@ -157,7 +160,10 @@ def crearProducto(request):
     if request.method == 'POST':
         miFormulario = productoForm(request.POST, request.FILES)
         if miFormulario.is_valid():
-            print(request.POST)
+            producto = miFormulario.save(commit=False)
+            producto.usuario = request.user 
+            producto.save()
+
             miFormulario.save()
             messages.success(request, "Producto registrado exitosamente") 
             return redirect('productos')

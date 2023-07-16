@@ -1,7 +1,10 @@
 from django.db import models
 from django.utils import timezone
+from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+
+
 
 
 # Create your models here.
@@ -19,7 +22,11 @@ class Avatar(models.Model):
     description = models.TextField(blank=True)
 
 class Producto(models.Model):
-    usuario = models.ForeignKey(User, on_delete=models.CASCADE, default = 1)
+    usuario = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        default=get_user_model()
+    )
     id = models.AutoField(primary_key=True)
     bars_code = models.IntegerField(null=True, blank=True)
     nombre_producto = models.CharField(max_length=40)
